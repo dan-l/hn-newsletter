@@ -43,7 +43,10 @@ func GetHnStories(num_stories int) ([]HnStory, error) {
 	for i, storyid := range topstories {
 		idstr := strconv.Itoa(storyid)
 		var story HnStory
-		JsonGet(HN_STORY+idstr+".json", &story)
+		err = JsonGet(HN_STORY+idstr+".json", &story)
+		if err != nil {
+			break
+		}
 		story.CommentUrl = HN_POST + idstr
 		stories[i] = story
 	}
