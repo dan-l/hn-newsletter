@@ -1,0 +1,1 @@
+worker: hn-newsletter
