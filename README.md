@@ -7,10 +7,7 @@
 
 [Install Go](https://golang.org/doc/install)
 
-[Install Go package manager](https://github.com/gpmgo/gopm/blob/master/README.md#installation)
-
-Change directory to "server"  
-`cd server`
+[Install Govendor](https://github.com/kardianos/govendor)
 
 Create configuration file  
 `touch conf.json`
@@ -21,16 +18,10 @@ Format of conf.json
 	"Mailgun": {
 		"Sender": <sender email>,
 		"Recipient": <recipient email>,
-		"Schedules": [
-	        {
-	            "Time": "Mon Jan  1 09:00:00 PDT 2015",
-	            "Zone": "America/Los_Angeles"
-            },
-            {
-			    "Time": <some other time following the format above>,
-                "Zone": <some other timezone follwing the format above>
-            }
-		],
+		"Schedules": [{
+			"Time": "02 Jan 06 12:00 -0700",
+		        "Zone": "America/Los_Angeles"
+            	}],
 		"Api": <mailgun api key>,
 		"Domain": <email domain>,
 		"Subject": <email subject>,
@@ -43,17 +34,32 @@ Format of conf.json
 ```
 
 Fetch package dependencies  
-`gopm get`
+`govendor fetch +m`
 
 Build binary  
-`gopm install`
+`govendor build github.com/dan-l/hn-newsletter`
 
 Run binary  
-`.vendor/bin/server`
+`./hn-newsletter`
 
 ## Third-party dependencies
 1. [Mailgun](https://documentation.mailgun.com/quickstart.html), REST API used to send the email
 2. [Firebase Hacker News API](https://hacker-news.firebaseio.com), REST API used to query stories
 3. [GoCron](https://github.com/jasonlvhit/gocron), Cron job in Go
 
+## Deployment with Heroku
+Create app  
+`heroku create`
 
+Deploy and Build  
+```
+git add .
+git commit -m <commit message> 
+git push heroku master
+```
+
+Start worker  
+`heroku ps:scale worker=1`
+
+Check log  
+`heroku logs --tail`
