@@ -9,16 +9,16 @@
 			"revisionTime": "2016-06-29T18:10:17Z"
 		},
 		{
-			"checksumSHA1": "w90ZU9RckNG5omXu/MiwSw8tWTE=",
+			"checksumSHA1": "ecrLnSi1O/nnyYNrCGMyuxDP0Bw=",
 			"path": "github.com/mailgun/mailgun-go",
-			"revision": "071c94f340f8ecdc9a17244565d7819479b8aea3",
-			"revisionTime": "2017-04-10T15:23:09Z"
+			"revision": "39996ba7228e34ce3f33762777eaa6f2dcc47fe1",
+			"revisionTime": "2017-05-02T15:01:10Z"
 		},
 		{
-			"checksumSHA1": "ynJSWoF6v+3zMnh9R0QmmG6iGV8=",
+			"checksumSHA1": "rJab1YdNhQooDiBWNnt7TLWPyBU=",
 			"path": "github.com/pkg/errors",
-			"revision": "ff09b135c25aae272398c51a07235b90a75aa4f0",
-			"revisionTime": "2017-03-16T20:15:38Z"
+			"revision": "c605e284fe17294bda444b34710735b29d1a9d90",
+			"revisionTime": "2017-05-05T04:36:39Z"
 		}
 	],
 	"rootPath": "github.com/dan-l/hn-newsletter"
