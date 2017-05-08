@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"log"
+	"time"
 )
 
 type HnStory struct {
@@ -17,30 +19,30 @@ type HnStory struct {
 }
 
 const (
-	HN_TOP_STORIES string = "https://hacker-news.firebaseio.com/v0/topstories.json"
+	HN_BEST_STORIES string = "https://hacker-news.firebaseio.com/v0/beststories"
 	HN_STORY       string = "https://hacker-news.firebaseio.com/v0/item/"
 	HN_POST        string = "https://news.ycombinator.com/item?id="
 )
 
 func JsonGet(url string, val interface{}) error {
 	resp, err := http.Get(url)
-	if checkErr("hn.go line 21: HttpGet "+url, err) {
+	if checkErr("hn.go: HttpGet "+url, err) {
 		return err
 	}
 	decoder := json.NewDecoder(resp.Body)
 	err = decoder.Decode(&val)
-	if checkErr("hn.go line 24: JsonGet "+url, err) {
+	if checkErr("hn.go: JsonGet "+url, err) {
 		return err
 	}
 	return nil
 }
 
 func GetHnStories(num_stories int) ([]HnStory, error) {
-	var topstories []int
-	err := JsonGet(HN_TOP_STORIES, &topstories)
-	topstories = topstories[:num_stories]
+	var bestStories []int
+	err := JsonGet(HN_BEST_STORIES, &bestStories)
+	bestStories = bestStories[:num_stories]
 	stories := make([]HnStory, num_stories)
-	for i, storyid := range topstories {
+	for i, storyid := range bestStories {
 		idstr := strconv.Itoa(storyid)
 		var story HnStory
 		err = JsonGet(HN_STORY+idstr+".json", &story)
@@ -79,4 +81,24 @@ func ConstructHnNewsletter(num_stories int) (string, error) {
 	}
 	htmlString += "</ul>"
 	return htmlString, err
+}
+
+
+func SendHnNewsletter(conf Configuration) {
+	log.Println("SendHnNewsletter", time.Now().Format(time.UnixDate))
+	html, err := ConstructHnNewsletter(conf.Hn.NumStories)
+	if err != nil {
+		sendErr(conf, err)
+	}
+	subject := conf.Mailgun.Subject
+	body := conf.Mailgun.Body
+	sender := conf.Mailgun.Sender
+	recipient := conf.Mailgun.Recipient
+	api := conf.Mailgun.Api
+	domain := conf.Mailgun.Domain
+
+	_, err = SendSimpleMessage(html, subject, body, sender, recipient, domain, api)
+	if checkErr("hn.go: SendHnNewsletter", err) {
+		return
+	}
 }

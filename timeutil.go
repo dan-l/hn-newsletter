@@ -7,31 +7,28 @@ import (
 	"time"
 )
 
-func formatSchedule(schedules []Schedule) {
-	for i, schedule := range schedules {
-		loc, _ := time.LoadLocation(schedule.Zone)
-		t, err := time.ParseInLocation(time.RFC822Z, schedule.Time, loc)
-		if checkErr("timeutil.go line 13: ", err) {
-			return
-		}
-
-		now := time.Now()
-		log.Println(now, " default format:", t)
-		log.Println(now, " Unix format:", t.Format(time.UnixDate))
-		utcT := t.UTC()
-		log.Println(now, " Same, in UTC:", utcT.Format(time.UnixDate))
-
-		h, m := utcT.Hour(), utcT.Minute()
-		hStr := strconv.Itoa(h)
-		mStr := strconv.Itoa(m)
-		if h < 10 {
-			hStr = "0" + hStr
-		}
-		if m < 10 {
-			mStr = "0" + mStr
-		}
-		schedules[i].JobTime = hStr + ":" + mStr
+func formatScheduleTime(zone string, scheduledTime string) string {
+	loc, _ := time.LoadLocation(zone)
+	t, err := time.ParseInLocation(time.RFC822Z, scheduledTime, loc)
+	if checkErr("timeutil.go: ", err) {
+		return ""
 	}
+
+	log.Println("default format:", t)
+	log.Println("Unix format:", t.Format(time.UnixDate))
+	utcT := t.UTC()
+	log.Println("Same, in UTC:", utcT.Format(time.UnixDate))
+
+	h, m := utcT.Hour(), utcT.Minute()
+	hStr := strconv.Itoa(h)
+	mStr := strconv.Itoa(m)
+	if h < 10 {
+		hStr = "0" + hStr
+	}
+	if m < 10 {
+		mStr = "0" + mStr
+	}
+	return hStr + ":" + mStr
 }
 
 func timeAgo(then int64) string {

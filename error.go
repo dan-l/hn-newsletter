@@ -22,7 +22,7 @@ func sendErr(conf Configuration, err error) {
 	domain := conf.Mailgun.Domain
 
 	_, err = SendSimpleMessage("", subject, body, sender, recipient, domain, api)
-	if checkErr("app.go line 47: sendErr", err) {
+	if checkErr("error.go: sendErr", err) {
 		return
 	}
 }
