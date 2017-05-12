@@ -19,7 +19,7 @@ type HnStory struct {
 }
 
 const (
-	HN_BEST_STORIES string = "https://hacker-news.firebaseio.com/v0/beststories"
+	HN_BEST_STORIES string = "https://hacker-news.firebaseio.com/v0/beststories.json"
 	HN_STORY       string = "https://hacker-news.firebaseio.com/v0/item/"
 	HN_POST        string = "https://news.ycombinator.com/item?id="
 )
